@@ -180,32 +180,7 @@
                         <span class="input-group-text" id="basic-addon1"><i class="fas fa-money-bill-wave"></i></span>
                         <input required  type="number" class="form-control" placeholder="harga" aria-describedby="basic-addon1">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Bonus status:</label>
-                        <div class="d-flex">
-                            <div class="form-check me-3">
-                                <input class="form-check-input" value=true type="radio" id="true-bonus">
-                                <label class="form-check-label" for="true-bonus">
-                                  true
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" value=false type="radio" id="false-bonus">
-                                <label class="form-check-label" for="false-bonus">
-                                  false
-                                </label>
-                            </div>
-                        </div>  
-                    </div>
-                    <label class="form-label mb-4">Tanggal exp bonus:</label>
-                    <div class="row ">
-                        <div class="col">
-                            <input required  type="date" class="form-control" id="tanggal">
-                        </div>
-                        <div class="col">
-                            <input required type="time" class="form-control" id="waktu" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-                        </div>
-                    </div>
+                   
                     <div class="text-center mt-3">
                         <button id="tambah-edit-btn" class="btn btn-primary">Simpan</button>
                         <button class="btn btn-danger close-btn">Cancel</button>
@@ -254,13 +229,6 @@
                         rows += '<td>' + no++ + '</td>';
                         rows += '<td>' + data.title + '</td>';
                         rows += '<td>' + data.stok + '</td>';
-                        if (data.bonus === "true") {
-                            rows += '<td><i id="check-s" class="fa fa-check"></i></td>';
-                            rows += '<td>' + data.bonus_exp + '</td>';
-                        } else {
-                            rows += '<td><i id="check-f" class="fa fa-close"></i></td>';
-                            rows += '<td></td>';
-                        }
                         rows += '<td>' + `<a data-id="${data.id}" class="btn btn-danger btn-hps">Hapus</a>` 
                             + ' ' + `<a data-id="${data.id}" class="btn btn-warning edit-btn">Edit</a>` + '</td>';
                         rows += '</tr>';
@@ -291,10 +259,6 @@
                         $("input[placeholder='harga']").val(response.price);
                         if (response.bonus_exp) {
                             var exp = response.bonus_exp.split(" ");
-                            var tgl = exp[0];
-                            var wkt = exp[1];
-                            $("#tanggal").val(tgl);
-                            $("#waktu").val(wkt);
                         }
     
                         // Mengubah ID tombol "tambah-edit-btn" menjadi "edit-tambah-btn"
@@ -329,7 +293,6 @@
         var bonus = $("input[name='bonus']:checked").val();
         var tanggal = $("#tanggal").val();
         var waktu = $("#waktu").val();
-        var exp = "";
         
 
         // Membuat objek data untuk dikirim ke API
@@ -338,17 +301,12 @@
             author: author,
             stok: stok,
             price: harga,
-            bonus: bonus,
-            bonus_exp: exp
+            bonus: bonus
         };
 
         // Cek apakah ID buku sudah ada atau belum
         if (idBuku) {
             // Mengirim data ke API menggunakan metode PUT
-            if (bonus == "true") {
-            data[bonus_exp] = tanggal + " " + waktu;
-            }else{
-            data[bonus_exp] = ""; }
             $.ajax({
                 url: "https://64600435ca2d89f7e7522d8d.mockapi.io/books/book_list/" + idBuku,
                 type: "PUT",
@@ -364,10 +322,6 @@
             });
         } else {
             // Mengirim data ke API menggunakan metode POST
-            if (bonus == "true") {
-            data[bonus_exp] = tanggal + " " + waktu;
-            }else{
-            data[bonus_exp] = ""; }
             $.ajax({
                 url: "https://64600435ca2d89f7e7522d8d.mockapi.io/books/book_list",
                 type: "POST",
