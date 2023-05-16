@@ -330,9 +330,7 @@
         var tanggal = $("#tanggal").val();
         var waktu = $("#waktu").val();
         var exp = "";
-        if (bonus == "true") {
-            exp = tanggal + " " + waktu;
-        }
+        
 
         // Membuat objek data untuk dikirim ke API
         var data = {
@@ -347,6 +345,10 @@
         // Cek apakah ID buku sudah ada atau belum
         if (idBuku) {
             // Mengirim data ke API menggunakan metode PUT
+            if (bonus == "true") {
+            data[bonus_exp] = tanggal + " " + waktu;
+            }else{
+            data[bonus_exp] = ""; }
             $.ajax({
                 url: "https://64600435ca2d89f7e7522d8d.mockapi.io/books/book_list/" + idBuku,
                 type: "PUT",
@@ -362,6 +364,10 @@
             });
         } else {
             // Mengirim data ke API menggunakan metode POST
+            if (bonus == "true") {
+            data[bonus_exp] = tanggal + " " + waktu;
+            }else{
+            data[bonus_exp] = ""; }
             $.ajax({
                 url: "https://64600435ca2d89f7e7522d8d.mockapi.io/books/book_list",
                 type: "POST",
